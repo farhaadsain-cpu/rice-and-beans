@@ -1,3 +1,4 @@
-date,project_id,attendees,summary,sentiment,theme
-2024-01-10,1,"Alice;Bob","Discussion was good","","Community"
-2024-01-12,2,,"Concerns about delays","Negative","Community"
+date,project_id,location,attendees,summary,sentiment,theme
+2024-01-10,1,Chicago,"Alice;Bob","Discussion was good","",Community
+2024-01-12,2,New York,,"Concerns about delays","Negative",Community
+2024-02-01,3,Boston,"Carlos;Diana","Taxi association raised concerns about service delays","",Taxi
