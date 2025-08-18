@@ -18,8 +18,8 @@ TARGETS = {
 REQUIRED_HEADERS = {
     "projects": ["project_id", "project_name", "bbee_level", "local_content_pct", "local_content_target", "avg_payment_days"],
     "contractors": ["contractor_id", "contractor_name", "bbee_level"],
-    "ed_kpis_monthly": ["month", "project_id", "kpi", "value"],
-    "contractor_ed_kpis_monthly": ["month", "contractor_id", "kpi", "value"],
+    "ed_kpis_monthly": ["timestamp", "project_id", "kpi", "obligation", "actual"],
+    "contractor_ed_kpis_monthly": ["timestamp", "contractor_id", "kpi", "obligation", "actual"],
     "esg_metrics_annual": ["year", "project_id", "kpi", "value", "target"],
     "supplier_spend_monthly": ["month", "project_id", "local_spend", "total_spend"],
     "jobs_training_monthly": ["month", "project_id", "jobs_created", "people_trained"],
