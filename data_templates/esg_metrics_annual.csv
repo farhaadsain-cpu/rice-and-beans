@@ -1,3 +1,13 @@
 year,project_id,kpi,value,target
 2023,1,water_use,80,75
 2023,2,water_use,90,85
+2023,1,carbon_emissions_avoided,150,140
+2023,2,carbon_emissions_avoided,120,130
+2023,1,recycling_rate,65,70
+2023,2,recycling_rate,72,75
+2023,1,training_hours,500,600
+2023,2,training_hours,450,500
+2023,1,dei_percentage,45,50
+2023,2,dei_percentage,55,60
+2023,1,csr_objectives_met,3,5
+2023,2,csr_objectives_met,4,5
