@@ -1,18 +1,37 @@
 import streamlit as st
-import pandas as pd
 import plotly.express as px
+import json
 from lib import loaders, models
 
 st.title("Predictive Risk")
 
 alerts = loaders.load_csv("data_templates/alerts_events.csv")
-alerts["month"] = pd.to_datetime(alerts["date"]).dt.to_period("M").astype(str)
-heatmap = alerts.groupby(["cluster","month"]).size().reset_index(name="count")
-fig = px.density_heatmap(heatmap, x="month", y="cluster", z="count", color_continuous_scale="Blues")
-st.plotly_chart(fig, use_container_width=True)
 
-st.subheader("Model")
-sample = pd.DataFrame({"metric1":[1,2,3,4],"metric2":[0,1,0,1],"risk_flag":[0,0,1,1]})
-model = models.train_risk_model(sample)
-preds = models.predict_risk(model, sample[["metric1","metric2"]])
-st.write(preds)
+summary = models.summarize_risks(alerts)
+col1, col2, col3 = st.columns(3)
+col1.metric("High Risk", summary["high"])
+col2.metric("Emerging Risks", summary["emerging"])
+col3.metric("Mitigations in Progress", summary["mitigations"])
+
+st.subheader("Predictive Risk Trend")
+trend = models.risk_trend(alerts)
+fig_trend = px.line(trend, x="month", y="risk_level", markers=True)
+st.plotly_chart(fig_trend, use_container_width=True)
+
+st.subheader("Risk by Cluster")
+clusters = loaders.load_csv("data_templates/site_lookup.csv")[["cluster"]].drop_duplicates()
+cluster_scores = models.risk_by_cluster(alerts)
+cluster_scores = clusters.merge(cluster_scores, on="cluster", how="left").fillna(0)
+with open("data_templates/sa_clusters.geojson") as f:
+    geojson = json.load(f)
+fig_map = px.choropleth(
+    cluster_scores,
+    geojson=geojson,
+    locations="cluster",
+    featureidkey="properties.cluster",
+    color="risk_score",
+    color_continuous_scale="Reds",
+    scope="africa",
+)
+fig_map.update_geos(fitbounds="locations", visible=False)
+st.plotly_chart(fig_map, use_container_width=True)

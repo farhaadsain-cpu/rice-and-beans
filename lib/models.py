@@ -1,14 +1,30 @@
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
+
+RISK_LEVEL_MAP = {"High": 3, "Emerging": 2, "Low": 1}
 
 
-def train_risk_model(df: pd.DataFrame) -> LogisticRegression:
-    X = df.drop(columns=["risk_flag"])
-    y = df["risk_flag"]
-    model = LogisticRegression(max_iter=1000)
-    model.fit(X, y)
-    return model
+def summarize_risks(alerts: pd.DataFrame) -> dict:
+    high = (alerts["risk_level"] == "High").sum()
+    emerging = (alerts["risk_level"] == "Emerging").sum()
+    mitigations = (alerts["status"] == "Mitigating").sum()
+    return {
+        "high": int(high),
+        "emerging": int(emerging),
+        "mitigations": int(mitigations),
+    }
 
 
-def predict_risk(model: LogisticRegression, X: pd.DataFrame) -> pd.Series:
-    return pd.Series(model.predict_proba(X)[:, 1], index=X.index)
+def risk_trend(alerts: pd.DataFrame) -> pd.DataFrame:
+    df = alerts.copy()
+    df["date"] = pd.to_datetime(df["date"])
+    df["month"] = df["date"].dt.to_period("M").dt.to_timestamp()
+    df["score"] = df["risk_level"].map(RISK_LEVEL_MAP).fillna(0)
+    trend = df.groupby("month")["score"].sum().reset_index(name="risk_level")
+    return trend
+
+
+def risk_by_cluster(alerts: pd.DataFrame) -> pd.DataFrame:
+    df = alerts.copy()
+    df["score"] = df["risk_level"].map(RISK_LEVEL_MAP).fillna(0)
+    cluster = df.groupby("cluster")["score"].sum().reset_index(name="risk_score")
+    return cluster

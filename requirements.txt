@@ -3,7 +3,6 @@ pandas>=2.2
 numpy>=1.26
 altair>=5.2
 plotly>=5.22
-scikit-learn>=1.4
 python-dateutil>=2.9
 ruff>=0.5
 pytest>=8.2

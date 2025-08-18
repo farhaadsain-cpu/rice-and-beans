@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 PRIMARY_COLOR = "#0061A8"
 SECONDARY_COLORS = {
     "navy": "#003B73",
@@ -23,7 +21,7 @@ REQUIRED_HEADERS = {
     "esg_metrics_annual": ["year", "project_id", "kpi", "value", "target"],
     "supplier_spend_monthly": ["month", "project_id", "local_spend", "total_spend"],
     "jobs_training_monthly": ["month", "project_id", "jobs_created", "people_trained"],
-    "alerts_events": ["date", "cluster", "alert_type", "severity"],
+    "alerts_events": ["date", "cluster", "alert_type", "severity", "risk_level", "status"],
     "site_lookup": ["site_id", "project_id", "cluster"],
     "themes_lookup": ["theme", "keywords"],
     "stakeholder_minutes": ["date", "project_id", "attendees", "summary", "sentiment", "theme"],
