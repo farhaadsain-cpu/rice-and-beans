@@ -1,6 +1,5 @@
 import streamlit as st
-import pandas as pd
-from lib import loaders, transforms
+from lib import loaders, transforms, constants, visuals
 
 st.title("Overview")
 
@@ -10,17 +9,37 @@ minutes = loaders.load_csv("data_templates/stakeholder_minutes.csv")
 alerts = loaders.load_csv("data_templates/alerts_events.csv")
 
 minutes = transforms.normalize_minutes(minutes)
-mean_sent = minutes["sentiment"].map({"Positive":1,"Neutral":0,"Negative":-1}).mean()
+alert_score, alert_tier = transforms.compute_alert_score(alerts)
+taxi_sent = transforms.taxi_association_sentiment(minutes)
 avg_bbee = contractors["bbee_level"].mean()
 local_vs_target = (
     projects["local_content_pct"].mean() - projects["local_content_target"].mean()
 )
-avg_payment = projects["avg_payment_days"].mean()
-risk_rate = (alerts[alerts["severity"]=="High"].shape[0] / max(len(alerts),1)) * 100
 
-col1,col2,col3,col4,col5 = st.columns(5)
-col1.metric("Risk Events (%)", f"{risk_rate:.1f}")
-col2.metric("Avg B-BBEE Level", f"{avg_bbee:.1f}")
-col3.metric("Local Content vs Target", f"{local_vs_target:.1f}")
-col4.metric("Avg Payment Days", f"{avg_payment:.1f}")
-col5.metric("Mean Sentiment", f"{mean_sent:.2f}")
+color_map = {
+    "High": constants.SECONDARY_COLORS["red"],
+    "Medium": constants.SECONDARY_COLORS["amber"],
+    "Low": constants.SECONDARY_COLORS["green"],
+}
+
+st.markdown(
+    f"""
+    <div style='background-color:{color_map[alert_tier]}; padding:10px; border-radius:5px; text-align:center; color:white;'>
+        Alert Score: {alert_score:.1f}% ({alert_tier})
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("Avg B-BBEE Level", f"{avg_bbee:.1f}")
+with col2:
+    st.metric("Local Content vs Target", f"{local_vs_target:.1f}")
+with col3:
+    st.metric("Taxi Association Sentiment", f"{taxi_sent:.2f}")
+
+st.subheader("Alerts Trend")
+alert_trend = alerts.groupby(["date", "severity"]).size().reset_index(name="count")
+chart = visuals.bar_chart(alert_trend, "date", "count", color="severity")
+st.altair_chart(chart, use_container_width=True)
