@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"cluster": "North"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[16, -22], [33, -22], [33, -28.5], [16, -28.5], [16, -22]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"cluster": "South"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[16, -28.5], [33, -28.5], [33, -35], [16, -35], [16, -28.5]]]
+      }
+    }
+  ]
+}
