@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 PRIMARY_COLOR = "#0061A8"
 SECONDARY_COLORS = {
     "navy": "#003B73",
@@ -26,5 +24,13 @@ REQUIRED_HEADERS = {
     "alerts_events": ["date", "cluster", "alert_type", "severity"],
     "site_lookup": ["site_id", "project_id", "cluster"],
     "themes_lookup": ["theme", "keywords"],
-    "stakeholder_minutes": ["date", "project_id", "attendees", "summary", "sentiment", "theme"],
+    "stakeholder_minutes": [
+        "date",
+        "project_id",
+        "location",
+        "attendees",
+        "summary",
+        "sentiment",
+        "theme",
+    ],
 }

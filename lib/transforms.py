@@ -20,4 +20,11 @@ def normalize_minutes(df: pd.DataFrame) -> pd.DataFrame:
     df["sentiment"] = df["sentiment"].apply(validators.validate_sentiment)
     mask = df["sentiment"].isna()
     df.loc[mask, "sentiment"] = df.loc[mask, "summary"].apply(infer_sentiment)
+    if "taxi_association" in df.columns and "theme" not in df.columns:
+        df["theme"] = df["taxi_association"]
+    if "association" in df.columns and "theme" not in df.columns:
+        df["theme"] = df["association"]
+    if "theme" not in df.columns:
+        df["theme"] = "General"
+    df["theme"] = df["theme"].fillna("General").astype(str).str.title()
     return df
