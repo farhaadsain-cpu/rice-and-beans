@@ -1,3 +1,4 @@
 date,cluster,alert_type,severity
 2024-01-01,North,Weather,High
 2024-01-05,South,Community,Low
+2024-01-09,East,Protest,Medium

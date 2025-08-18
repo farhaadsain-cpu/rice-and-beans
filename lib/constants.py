@@ -15,6 +15,12 @@ TARGETS = {
     "bbee_level": 4,
 }
 
+# Percentage thresholds for alert scoring
+ALERT_THRESHOLDS = {
+    "high": 50,
+    "medium": 25,
+}
+
 REQUIRED_HEADERS = {
     "projects": ["project_id", "project_name", "bbee_level", "local_content_pct", "local_content_target", "avg_payment_days"],
     "contractors": ["contractor_id", "contractor_name", "bbee_level"],
